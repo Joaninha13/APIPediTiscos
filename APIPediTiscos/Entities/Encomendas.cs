@@ -12,7 +12,7 @@ public class Encomendas{
 
     public DateTime DataEncomenda { get; set; }
 
-    public string? Estado { get; set; } //Processamento, Confirmado, Rejeitado
+    public string? Estado { get; set; } //Processamento, Concluido, Confirmado, Rejeitado
 
     public decimal? Total { get; set; }
 

@@ -42,4 +42,19 @@ public class EncomendasController : ControllerBase {
         }
     }
 
+    // PUT: api/Encomendas/{clientId}
+    [HttpPut("{clientId}")]
+    public async Task<IActionResult> FinalizarEncomenda(string clientId){
+        try{
+            var encomenda = await _encomendaRepository.FinhisEncomenda(clientId);
+            if (encomenda == null)
+                return NotFound(new { Message = "Nenhuma encomenda em processamento encontrada para este cliente." });
+
+            return Ok(encomenda);
+        }
+        catch (Exception ex){
+            return StatusCode(500, new { Message = "Erro ao finalizar a encomenda.", Details = ex.Message });
+        }
+    }
+
 }

@@ -9,4 +9,7 @@ public interface IEncomenda{
 
     // Create a new order for a client allways in state "Processamento" and if the client has an order in state "Processamento" return that order
     Task<Encomendas> StartNewEncomendaAsync(string clientId);
+
+    // Por o Estado da encomenda como 'Concluido'
+    Task<Encomendas> FinhisEncomenda(string clientId);
 }

@@ -25,13 +25,17 @@ public class ProdutoRepository : IProduto{
 
     public async Task<Produtos> GetDetailsFromProdutoAsync(int id){
 
-        return await dbContext.Produtos
+        var produto = await dbContext.Produtos
             .Where(p => p.Id == id)
             .Include("SubCategoria")
             .Include("ModoDispo")
             .Include("Promocoes")
             .FirstOrDefaultAsync();
 
+        if (produto == null)
+            throw new Exception("Produto não encontrado");
+        else
+            return produto;
     }
 
     public async Task<IEnumerable<Produtos>> GetProdutosByCategoriaAsync(int categoriaId){

@@ -20,13 +20,20 @@ public class ItensEncomendadoRepository : IItensEncomendado{
         var item = await dbContext.ItensEncomendados.Where(p => p.Id == encomendaId && p.ProdutoId == produtoId).FirstAsync();
 
         if (item != null){
-            item.Quantidade += quantidade;
-            dbContext.ItensEncomendados.Update(item);
+
 
             var produto2 = await dbContext.Produtos.FindAsync(produtoId);
-            produto2.Stock -= quantidade;
 
+            // dar trow se o stock for menor que a quantidade
+            if (produto2.Stock < quantidade)
+                throw new Exception("Stock insuficiente");
+
+
+            produto2.Stock -= quantidade;
             dbContext.Produtos.Update(produto2);
+
+            item.Quantidade += quantidade;
+            dbContext.ItensEncomendados.Update(item);
 
             await dbContext.SaveChangesAsync();
             return item;
