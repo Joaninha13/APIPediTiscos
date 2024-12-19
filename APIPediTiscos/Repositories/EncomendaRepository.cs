@@ -12,6 +12,22 @@ public class EncomendaRepository : IEncomenda{
         this.dbContext = dbContext;
     }
 
+    // Por o Estado da encomenda como 'Concluido'
+    public Task<Encomendas> FinhisEncomenda(string clientId)
+    {
+        var encomenda = dbContext.Encomendas
+            .Where(e => e.ClienteId == clientId && e.Estado == "Processamento")
+            .FirstOrDefault();
+
+        if (encomenda != null){
+            encomenda.Estado = "Concluido";
+            dbContext.Encomendas.Update(encomenda);
+            dbContext.SaveChangesAsync();
+        }
+
+        return Task.FromResult(encomenda);
+    }
+
     // Get all orders by client where state "Confirmado"
     public async Task<IEnumerable<Encomendas>> GetAllEncomendasByClienteAsync(string clientId){
 
@@ -24,7 +40,7 @@ public class EncomendaRepository : IEncomenda{
     // Create a new order for a client allways in state "Processamento" and if the client has an order in state "Processamento" return that order
     public async Task<Encomendas> StartNewEncomendaAsync(string clientId){
 
-        Encomendas encomenda = await dbContext.Encomendas
+        var encomenda = await dbContext.Encomendas
             .Where(e => e.ClienteId == clientId && e.Estado == "Processamento")
             .FirstOrDefaultAsync();
 
