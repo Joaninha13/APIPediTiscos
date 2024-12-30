@@ -15,5 +15,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ModoDispo> ModoDispo { get; set; }
     public DbSet<Pagamentos> Pagamentos { get; set; }
     public DbSet<Promocoes> Promocoes { get; set; }
+    public DbSet<Favoritos> Favoritos { get; set; }
 
 }

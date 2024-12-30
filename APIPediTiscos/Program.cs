@@ -1,6 +1,7 @@
 ﻿using APIPediTiscos.Data;
 using APIPediTiscos.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,6 +30,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
       new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
         };
     });
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
@@ -67,8 +73,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -79,6 +85,7 @@ builder.Services.AddScoped<ISubCategoria, SubCategoriaRepository>();
 builder.Services.AddScoped<IEncomenda, EncomendaRepository>();
 builder.Services.AddScoped<IItensEncomendado, ItensEncomendadoRepository>();
 builder.Services.AddScoped<IPagamento, PagamentoRepository>();
+builder.Services.AddScoped<IFavoritos, FavoritoRepository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -87,7 +94,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapGroup("/identity").MapIdentityApi<ApplicationUser>();
+//app.MapGroup("/identity").MapIdentityApi<ApplicationUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
