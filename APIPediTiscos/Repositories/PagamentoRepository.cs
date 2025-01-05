@@ -23,7 +23,8 @@ public class PagamentoRepository : IPagamento
             .Where(e => e.Id == encomendaId)
             .Select(e => e.Total)
             .FirstOrDefaultAsync(),
-            Estado = "Pendente"
+            Estado = "Pendente",
+            DataPagamento = DateTime.Now
         };
 
         dbContext.Pagamentos.Add(pagamento);
