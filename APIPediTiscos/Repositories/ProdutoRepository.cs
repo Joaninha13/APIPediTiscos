@@ -74,10 +74,10 @@ public class ProdutoRepository : IProduto{
     public async Task<IEnumerable<Produtos>> GetProdutosWithPromotionAsync(){
 
         return await dbContext.Produtos
+            .Where(p => p.PromocoesId != null)
             .Include("SubCategoria")
             .Include("ModoDispo")
             .Include("Promocoes")
-            .Where(p => p.PromocoesId != null)
             .ToListAsync();
 
     }

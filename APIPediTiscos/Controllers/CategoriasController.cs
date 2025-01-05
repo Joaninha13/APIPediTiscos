@@ -1,10 +1,11 @@
 ﻿using APIPediTiscos.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIPediTiscos.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 
 //[Authorize]
 public class CategoriasController : ControllerBase {
@@ -16,6 +17,7 @@ public class CategoriasController : ControllerBase {
     }
 
     // GET: api/Categorias
+    //[AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAllCategorias(){
         try{

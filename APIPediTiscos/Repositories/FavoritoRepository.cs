@@ -40,7 +40,7 @@ public class FavoritoRepository : IFavoritos{
 
     public async Task<IEnumerable<Favoritos>> GetAllFavoritosFromCliendAsync(string clientId){
 
-        return await dbContext.Favoritos.Where(p => p.ClienteId == clientId).ToListAsync();
+        return await dbContext.Favoritos.Where(p => p.ClienteId == clientId).Include("Cliente").Include("Produto").ToListAsync();
 
     }
 }

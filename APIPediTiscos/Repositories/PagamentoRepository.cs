@@ -33,9 +33,22 @@ public class PagamentoRepository : IPagamento
 
     }
 
+    public async Task<Pagamentos> ReattempPagamentoAsync(int encomendaId){
+
+        var pagamento = await dbContext.Pagamentos
+            .Include("Encomenda")
+            .FirstOrDefaultAsync(p => p.EncomendaId == encomendaId);
+
+        pagamento.Estado = "Pendente";
+        await dbContext.SaveChangesAsync();
+        return pagamento;
+
+    }
+
     public async Task<Pagamentos> GetPagamentoByEncomendaAsync(int encomendaId){
 
         return await dbContext.Pagamentos
+            .Include("Encomenda")
             .FirstOrDefaultAsync(p => p.EncomendaId == encomendaId);
 
     }

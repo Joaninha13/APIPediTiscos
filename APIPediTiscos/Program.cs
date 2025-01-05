@@ -11,8 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-// configura a aplica��o para autenticar os utilizadores usando tokens JWT,
-// verificando o emissor, audi�ncia, tempo de vida e chave de assinatura do emissor
+// Configura a aplicação para autenticar os utilizadores, usando tokens JWT,
+// verificando o emissor, a audiência, o tempo de vida e a chave de assinatura do emissor.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

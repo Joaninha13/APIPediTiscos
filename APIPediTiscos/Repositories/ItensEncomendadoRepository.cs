@@ -13,14 +13,12 @@ public class ItensEncomendadoRepository : IItensEncomendado{
         this.dbContext = dbContext;
     }
 
-
     // Add to encomenda this produto with this quantidade and get the stock - quantidade in produtos
     public async Task<ItensEncomendados> AddItemToEncomendaAsync(int encomendaId, int produtoId, int quantidade){
 
-        var item = await dbContext.ItensEncomendados.Where(p => p.Id == encomendaId && p.ProdutoId == produtoId).FirstAsync();
+        var item = await dbContext.ItensEncomendados.FirstOrDefaultAsync(p => p.Id == encomendaId && p.ProdutoId == produtoId);
 
         if (item != null){
-
 
             var produto2 = await dbContext.Produtos.FindAsync(produtoId);
 
@@ -80,7 +78,7 @@ public class ItensEncomendadoRepository : IItensEncomendado{
 
     public async Task<IEnumerable<ItensEncomendados>> GetItensEncomendadosByEncomendaAsync(int encomendaId){
 
-        return await dbContext.ItensEncomendados.Where(p => p.EncomendaId == encomendaId).ToListAsync();
+        return await dbContext.ItensEncomendados.Where(p => p.EncomendaId == encomendaId).Include("Encomenda").Include("Produto").ToListAsync();
 
     }
 

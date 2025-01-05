@@ -33,6 +33,23 @@ public class PagamentosController : ControllerBase {
         }
     }
 
+    // PUT: api/Pagamentos/{encomendaId}
+    [HttpPut("{encomendaId}")]
+    public async Task<IActionResult> ReattempPagamento(int encomendaId){
+        try
+        {
+            var pagamento = await _pagamentoRepository.ReattempPagamentoAsync(encomendaId);
+            if (pagamento == null)
+                return NotFound(new { Message = "Pagamento não encontrado." });
+
+            return Ok(pagamento);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "Ocorreu um erro ao reativar o pagamento.", Details = ex.Message });
+        }
+    }
+
     // GET: api/Pagamentos/{encomendaId}
     [HttpGet("{encomendaId}")]
     public async Task<IActionResult> GetPagamentoByEncomenda(int encomendaId){

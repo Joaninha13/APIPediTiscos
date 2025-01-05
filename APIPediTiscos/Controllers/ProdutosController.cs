@@ -6,6 +6,7 @@ namespace APIPediTiscos.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
+//[Authorize]
 public class ProdutosController : ControllerBase {
 
     private readonly IProduto _produtoRepository;
@@ -71,8 +72,8 @@ public class ProdutosController : ControllerBase {
         }
     }
 
-    // GET: api/Produtos/mais-vendidos
-    [HttpGet("mais-vendidos")]
+    // GET: api/Produtos/maisvendidos
+    [HttpGet("maisvendidos")]
     public async Task<IActionResult> GetProdutosWithMoreSales(){
         try{
             var produtos = await _produtoRepository.GetProdutosWithMoreSalesAsync();
@@ -83,8 +84,8 @@ public class ProdutosController : ControllerBase {
         }
     }
 
-    // GET: api/Produtos/em-promocao
-    [HttpGet("em-promocao")]
+    // GET: api/Produtos/empromocao
+    [HttpGet("empromocao")]
     public async Task<IActionResult> GetProdutosWithPromotion(){
         try{
             var produtos = await _produtoRepository.GetProdutosWithPromotionAsync();

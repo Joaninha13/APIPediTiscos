@@ -46,7 +46,7 @@ public class UtilizadoresController : ControllerBase
             Email = utilizador.Email,
             Nome = utilizador.Nome,
             NIF = utilizador.NIF,
-            EmailConfirmed = true,
+            EmailConfirmed = false,
             PhoneNumberConfirmed = true
         };
 
@@ -57,7 +57,7 @@ public class UtilizadoresController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> LoginUser([FromBody] Utilizador utilizador)
+    public async Task<IActionResult> LoginUser([FromBody] LoginModel utilizador)
     {
         var utilizadorAtual = await _userManager.Users.FirstOrDefaultAsync(u =>
                                  u.Email == utilizador.Email);
@@ -66,6 +66,9 @@ public class UtilizadoresController : ControllerBase
         {
             return NotFound("Utilizador não encontrado");
         }
+
+        if(!utilizadorAtual.EmailConfirmed)
+            return BadRequest("Email não confirmado");
 
         // ************ Logar com Identity
         var result = await _signInManager.PasswordSignInAsync(utilizador.Email, utilizador.Password, false, lockoutOnFailure: false);
@@ -107,15 +110,20 @@ public class UtilizadoresController : ControllerBase
     }
 }
 
-    public class Utilizador{
+public class Utilizador{
 
     public string? Nome { get; set; }
 
     public string Email { get; set; }
     public string Password { get; set; }
-    public string? ConfirmPassword { get; set; }
+    public string ConfirmPassword { get; set; }
 
     public long? NIF { get; set; }
 
 
+}
+
+public class LoginModel{
+    public string? Email { get; set; }
+    public string? Password { get; set; }
 }

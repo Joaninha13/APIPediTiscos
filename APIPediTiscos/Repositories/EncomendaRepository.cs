@@ -17,10 +17,16 @@ public class EncomendaRepository : IEncomenda{
     {
         var encomenda = dbContext.Encomendas
             .Where(e => e.ClienteId == clientId && e.Estado == "Processamento")
+            .Include("Cliente")
             .FirstOrDefault();
 
         if (encomenda != null){
             encomenda.Estado = "Concluido";
+
+            encomenda.Total = dbContext.ItensEncomendados
+                .Where(l => l.EncomendaId == encomenda.Id)
+                .Sum(l => l.Quantidade * l.Produto.Preco);
+
             dbContext.Encomendas.Update(encomenda);
             dbContext.SaveChangesAsync();
         }
@@ -32,7 +38,8 @@ public class EncomendaRepository : IEncomenda{
     public async Task<IEnumerable<Encomendas>> GetAllEncomendasByClienteAsync(string clientId){
 
         return await dbContext.Encomendas
-            .Where(e => e.ClienteId == clientId && e.Estado == "Confirmado")
+            .Where(e => e.ClienteId == clientId && e.Estado != "Processamento")
+            .Include("Cliente")
             .ToListAsync();
 
     }
@@ -42,6 +49,7 @@ public class EncomendaRepository : IEncomenda{
 
         var encomenda = await dbContext.Encomendas
             .Where(e => e.ClienteId == clientId && e.Estado == "Processamento")
+            .Include("Cliente")
             .FirstOrDefaultAsync();
 
         if (encomenda == null){
